@@ -28,7 +28,7 @@
 /***********************************************************************
  * Globals and definitions
  ***********************************************************************/
-#define SCAN_DELAY_TIMEOUT 175      /* If you set a low value, ghosthing characters will occour */
+#define SCAN_DELAY_TIMEOUT 195      /* If you set a low value, ghosthing characters will occour */
 
 #define R_TP1_PIN  PIN_B2
 #define R_TP20_PIN PIN_D0
@@ -59,6 +59,17 @@
 #define ESC       -17
 #define R_SELECT  -18
 #define L_SELECT  -19
+#define TAB       -20
+#define F1        -21
+#define F2        -22
+#define F3        -23
+#define F4        -24
+#define F5        -25
+#define F6        -26
+#define F7        -27
+#define F8        -28
+#define F9        -29
+#define F10       -30
 #define GREEN     -4
 #define RED       -5
 #define CHAT      -6
@@ -72,9 +83,11 @@
 #define MODE_RED    1100
 #define MODE_NORMAL 1110
 #define MODE_CTRL   1111
+#define MODE_ALT    1002
 
 int current_mode = MODE_NORMAL,
-    in_ctrl_mode = 0;
+    in_ctrl_mode = 0,
+    in_alt_mode = 0;
     
 int rows[7] = {R_TP1_PIN, R_TP20_PIN, R_TP21_PIN, R_TP22_PIN, R_TP23_PIN, R_TP24_PIN, R_TP25_PIN};
 int cols[7] = {C_TP6_PIN, C_TP7_PIN, C_TP8_PIN, C_TP9_PIN, C_TP10_PIN, C_TP11_PIN, C_TP12_PIN};
@@ -90,7 +103,7 @@ char characters [7][7] =
   {'u'      , 'q'   , 'w' , 'e' , 'r', 't'  , 'y'}, // TP21
   {'j'      , 'a'   , 's' , 'd' , 'f', 'g'  , 'h'}, // TP22
   {'n'      , SHIFT , 'z' , 'x' , 'c', 'v'  , 'b'}, // TP23
-  {RIGHT    , GREEN , CHAT, LEFT, ' ', '.'  , 'm'}, // TP24
+  {TAB      , GREEN , CHAT, LEFT, ' ', '.'  , 'm'}, // TP24
   {RED      , '8'   , '9' , '0' , 'p', ENTER, ','}  // TP25
 };
 
@@ -110,12 +123,12 @@ char red_characters [7][7] =
 {
    /* 6         7       8      9      10    11     12 */
   {BACKSPACE,   'k',    'i', PG_UP,    ' ',  ' ',PG_DWN}, // TP1
-  {'7'      ,   ESC,    '2',   '3',    '4',   '5',  '6'}, // TP20
-  {'u'      ,   'q',     UP,   'e',    'r',   't',  'y'}, // TP21
+  {F7       ,    F1,     F2,    F3,     F4,    F5,   F6}, // TP20
+  {'u'      ,   ESC,     UP,   'e',    'r',   't',  'y'}, // TP21
   {'"'      ,  LEFT,   DOWN, RIGHT,    'e',   'y',  '|'}, // TP22
   {'n'      , CAPS ,    'z',   'x',    'c',   '_',  '+'}, // TP23
   {END      , GREEN,   CHAT,  HOME,    ' ',   ' ',  'u'}, // TP24
-  {RED      , '8'  ,    '9', '0'  ,    '=', ENTER,  ';'} // TP25
+  {RED      , F8   ,     F9,  F10  ,    '=', ENTER,  ';'} // TP25
 };    
 
 char green_characters [7][7] =
@@ -174,6 +187,11 @@ void loop()
           change_current_mode(MODE_CTRL);
           in_ctrl_mode = 1;
         }
+        else if (key == LEFT)
+        {
+          change_current_mode(MODE_ALT);
+          in_alt_mode = 1;
+        }
          
         if (key > 0)
         {
@@ -182,6 +200,12 @@ void loop()
             Keyboard.press(key);
             delay(SCAN_DELAY_TIMEOUT);
             in_ctrl_mode = 0;
+            Keyboard.releaseAll();
+          } else if (in_alt_mode == 1) {
+            Keyboard.press(KEY_LEFT_ALT);
+            Keyboard.press(key);
+            delay(SCAN_DELAY_TIMEOUT);
+            in_alt_mode = 0;
             Keyboard.releaseAll();
           } else 
             Keyboard.write(key);
@@ -261,7 +285,62 @@ void press_key(int key)
         Keyboard.press(KEY_UP_ARROW);
         Keyboard.release(KEY_UP_ARROW);
         break;
-        
+
+      case(TAB):
+        Keyboard.press(KEY_TAB);
+        Keyboard.release(KEY_TAB);
+        break;
+
+      case(F1):
+        Keyboard.press(KEY_F1);
+        Keyboard.release(KEY_F1);
+        break;
+
+      case(F2):
+        Keyboard.press(KEY_F2);
+        Keyboard.release(KEY_F2);
+        break;
+
+      case(F3):
+        Keyboard.press(KEY_F3);
+        Keyboard.release(KEY_F3);
+        break;
+
+      case(F4):
+        Keyboard.press(KEY_F4);
+        Keyboard.release(KEY_F4);
+        break;
+
+      case(F5):
+        Keyboard.press(KEY_F5);
+        Keyboard.release(KEY_F5);
+        break;
+
+      case(F6):
+        Keyboard.press(KEY_F6);
+        Keyboard.release(KEY_F6);
+        break;
+
+      case(F7):
+        Keyboard.press(KEY_F7);
+        Keyboard.release(KEY_F7);
+        break;
+
+      case(F8):
+        Keyboard.press(KEY_F8);
+        Keyboard.release(KEY_F8);
+        break;
+
+      case(F9):
+        Keyboard.press(KEY_F9);
+        Keyboard.release(KEY_F9);
+        break;
+
+      case(F10):
+        Keyboard.press(KEY_F10);
+        Keyboard.release(KEY_F10);
+        break;
+
       case(RIGHT):
         Keyboard.press(KEY_RIGHT_ARROW);
         Keyboard.release(KEY_RIGHT_ARROW);
