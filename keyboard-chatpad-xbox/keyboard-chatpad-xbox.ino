@@ -70,6 +70,16 @@
 #define F8        -28
 #define F9        -29
 #define F10       -30
+#define SCUT1     -31
+#define SCUT2     -32
+#define SCUT3     -33
+#define SCUT4     -34
+#define SCUT5     -35
+#define SCUT6     -36
+#define SCUT7     -37
+#define SCUT8     -38
+#define SCUT9     -39
+#define SCUT0     -40
 #define GREEN     -4
 #define RED       -5
 #define CHAT      -6
@@ -91,6 +101,22 @@ int current_mode = MODE_NORMAL,
     
 int rows[7] = {R_TP1_PIN, R_TP20_PIN, R_TP21_PIN, R_TP22_PIN, R_TP23_PIN, R_TP24_PIN, R_TP25_PIN};
 int cols[7] = {C_TP6_PIN, C_TP7_PIN, C_TP8_PIN, C_TP9_PIN, C_TP10_PIN, C_TP11_PIN, C_TP12_PIN};
+
+/***********************************************************************
+ * Strings shortcut (userful on RPi Only)
+ ***********************************************************************/
+char shortcut[10][60]= {
+  "sudo shutdown -h now\n",
+  "vim /home/pi/Documents/quick_note_$(date +\"%Y%m%d\").txt\n",
+  "vim /home/pi/Documents/general_note.txt\n",
+  "bc\n",
+  "sudo apt-get update ",
+  "sudo apt install ",
+  "sudo vim /etc/wpa_supplicant/wpa_supplicant.conf\n",
+  "sudo mount /dev/sda1 /media/pendrive\n",
+  "sudo umount /media/pendrive\n",
+  "sudo reboot\n"
+};
 
 /***********************************************************************
  * Keyboard mapping
@@ -125,7 +151,7 @@ char red_characters [7][7] =
   {BACKSPACE,   'k',    'i', PG_UP,    ' ',  ' ',PG_DWN}, // TP1
   {F7       ,    F1,     F2,    F3,     F4,    F5,   F6}, // TP20
   {'u'      ,   ESC,     UP,   'e',    'r',   't',  'y'}, // TP21
-  {'"'      ,  LEFT,   DOWN, RIGHT,    'e',   'y',  '|'}, // TP22
+  {'"'      ,  LEFT,   DOWN, RIGHT,    'e',   'y', '\\'}, // TP22
   {'n'      , CAPS ,    'z',   'x',    'c',   '_',  '+'}, // TP23
   {END      , GREEN,   CHAT,  HOME,    ' ',   ' ',  'u'}, // TP24
   {RED      , F8   ,     F9,  F10  ,    '=', ENTER,  ';'} // TP25
@@ -135,12 +161,12 @@ char green_characters [7][7] =
 {
    /* 6         7       8      9      10    11     12 */
   {BACKSPACE,   '[',   '*',   '(',    ' ',   ' ',  ']'}, // TP1
-  {'7'      ,   '1',   '2',   '3',    '4',   '5',  '6'}, // TP20
+  {SCUT7    ,SCUT1 ,SCUT2 ,SCUT3 ,SCUT4 ,SCUT5 ,SCUT6 }, // TP20
   {'&'      ,   '!',   '@',   'E',    '#',   '%',  '^'}, // TP21
   {'\''     ,   '~',   ' ',   '{',    '}',   ' ',  '/'}, // TP22
   {'<'      , SHIFT,   '`',   '<',    '>',   '-',  '|'}, // TP23
   {RIGHT    , GREEN, CHAT , LEFT ,    ' ',   '?',  '>'}, // TP24
-  {RED      , '8' ,   '9',    '0',    ')', ENTER,  ':'} // TP25
+  {RED      ,SCUT8 ,SCUT9 ,SCUT0 ,    ')', ENTER,  ':'} // TP25
 };
 
 
@@ -207,7 +233,7 @@ void loop()
             delay(SCAN_DELAY_TIMEOUT);
             in_alt_mode = 0;
             Keyboard.releaseAll();
-          } else 
+          } else
             Keyboard.write(key);
           change_current_mode(MODE_NORMAL);
         }
@@ -255,6 +281,28 @@ int get_matrix_value(int row, int col, int current_mode)
     }
 }
 
+void send_shortcut(int scid){
+
+  int id = 0;
+  switch(scid) {
+    
+    case(SCUT0): id = 0; break;
+    case(SCUT1): id = 1; break;
+    case(SCUT2): id = 2; break;
+    case(SCUT3): id = 3; break;
+    case(SCUT4): id = 4; break;
+    case(SCUT5): id = 5; break;
+    case(SCUT6): id = 6; break;
+    case(SCUT7): id = 7; break;
+    case(SCUT8): id = 8; break;
+    case(SCUT9): id = 9; break;
+    default:
+      id=0;
+  }
+
+  Keyboard.print(shortcut[id]);
+  
+}
 
 void press_key(int key)
 {
@@ -375,7 +423,18 @@ void press_key(int key)
           Keyboard.press(KEY_ESC);
           Keyboard.release(KEY_ESC);
           break;
- 
+
+      case (SCUT0): send_shortcut(SCUT0); change_current_mode(MODE_NORMAL); break;
+      case (SCUT1): send_shortcut(SCUT1); change_current_mode(MODE_NORMAL); break;
+      case (SCUT2): send_shortcut(SCUT2); change_current_mode(MODE_NORMAL); break;
+      case (SCUT3): send_shortcut(SCUT3); change_current_mode(MODE_NORMAL); break;
+      case (SCUT4): send_shortcut(SCUT4); change_current_mode(MODE_NORMAL); break;
+      case (SCUT5): send_shortcut(SCUT5); change_current_mode(MODE_NORMAL); break;
+      case (SCUT6): send_shortcut(SCUT6); change_current_mode(MODE_NORMAL); break;
+      case (SCUT7): send_shortcut(SCUT7); change_current_mode(MODE_NORMAL); break;
+      case (SCUT8): send_shortcut(SCUT8); change_current_mode(MODE_NORMAL); break;
+      case (SCUT9): send_shortcut(SCUT9); change_current_mode(MODE_NORMAL); break;
+          
       default:
           break;
   }  
