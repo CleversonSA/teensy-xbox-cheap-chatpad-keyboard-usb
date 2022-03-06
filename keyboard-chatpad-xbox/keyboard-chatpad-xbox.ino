@@ -213,7 +213,10 @@ void loop()
           change_current_mode(MODE_CTRL);
           in_ctrl_mode = 1;
         }
-        else if (key == LEFT)
+        else if (key == LEFT && 
+            !(current_mode == MODE_SHIFT) &&
+            !(current_mode == MODE_GREEN) &&
+            !(current_mode == MODE_RED))
         {
           change_current_mode(MODE_ALT);
           in_alt_mode = 1;
