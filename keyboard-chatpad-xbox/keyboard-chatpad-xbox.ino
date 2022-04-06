@@ -150,7 +150,7 @@ char red_characters [7][7] =
    /* 6         7       8      9      10    11     12 */
   {BACKSPACE,   'k',    'i', PG_UP,    ' ',  ' ',PG_DWN}, // TP1
   {F7       ,    F1,     F2,    F3,     F4,    F5,   F6}, // TP20
-  {'u'      ,   ESC,     UP,   'e',    'r',   't',  'y'}, // TP21
+  {'u'      ,   ESC,     UP,   'e',    '$',   't',  'y'}, // TP21
   {'"'      ,  LEFT,   DOWN, RIGHT,    'e',   'y', '\\'}, // TP22
   {'n'      , CAPS ,    'z',   'x',    'c',   '_',  '+'}, // TP23
   {END      , GREEN,   CHAT,  HOME,    ' ',   ' ',  'u'}, // TP24
